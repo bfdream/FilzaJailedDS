@@ -13,12 +13,12 @@ jobs:
 
     steps:
       - name: Checkout Filza source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: recursive
 
       - name: Checkout Theos
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: theos/theos
           ref: master
