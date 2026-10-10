@@ -100,7 +100,7 @@ jobs:
             build-output/FilzaApplySandboxExt.dylib
 
       - name: Upload dylib
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: FilzaApplySandboxExt
           path: build-output/FilzaApplySandboxExt.dylib
