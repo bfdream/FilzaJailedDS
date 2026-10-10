@@ -37,6 +37,37 @@ jobs:
             -C theos/sdks
           ls -la theos/sdks
 
+      - name: Install missing system headers
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          IOS_SDK="$GITHUB_WORKSPACE/theos/sdks/iPhoneOS16.5.sdk"
+          MAC_SDK="$(xcrun --sdk macosx --show-sdk-path)"
+
+          # XPC headers from Xcode's macOS SDK
+          test -f "$MAC_SDK/usr/include/xpc/xpc.h"
+          mkdir -p "$IOS_SDK/usr/include"
+          cp -R "$MAC_SDK/usr/include/xpc" \
+                "$IOS_SDK/usr/include/"
+
+          # Some XPC headers depend on launch.h
+          if [ ! -f "$IOS_SDK/usr/include/launch.h" ]; then
+            cp "$MAC_SDK/usr/include/launch.h" \
+               "$IOS_SDK/usr/include/launch.h"
+          fi
+
+          # Darwin fileport header
+          mkdir -p "$IOS_SDK/usr/include/sys"
+          curl -fL --retry 3 \
+            "https://raw.githubusercontent.com/apple-oss-distributions/xnu/main/bsd/sys/fileport.h" \
+            -o "$IOS_SDK/usr/include/sys/fileport.h"
+
+          test -s "$IOS_SDK/usr/include/xpc/xpc.h"
+          test -s "$IOS_SDK/usr/include/sys/fileport.h"
+
+          echo "System headers installed"
+
       - name: Build dylib
         shell: bash
         env:
