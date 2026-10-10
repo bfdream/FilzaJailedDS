@@ -1,8 +1,7 @@
 @import UIKit;
 #import <objc/runtime.h>
 #import <objc/message.h>
-typedef struct _xpc_object_s *xpc_object_t;
-extern xpc_object_t xpc_null_create(void);
+#import <xpc/xpc.h>
 
 #include "kexploit/kexploit_opa334.h"
 #include "kexploit/kutils.h"
